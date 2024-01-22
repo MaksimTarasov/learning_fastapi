@@ -3,7 +3,8 @@
 """
 
 
-from sqlalchemy import create_engine, MetaData, Table, Column, Integer, String
+from sqlalchemy import create_engine, MetaData, Table, Column, Integer, String, select
+
 edgien = create_engine("sqlite+pysqlite:///test.db", echo=True)
 metadata = MetaData()
 #Опреление таблицы
@@ -27,3 +28,11 @@ vodka_table = Table(
 metadata.create_all(edgien)
 print(metadata.tables)
 print(beer_table.c.name)
+sel = beer_table.select()
+print(sel)
+sel = select(beer_table.c.name)
+print(sel)
+with edgien.connect() as con:
+    res = con.execute(sel)
+    print(res.all())
+    con.commit()
